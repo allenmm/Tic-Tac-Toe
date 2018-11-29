@@ -1,0 +1,2 @@
+This folder contains a project that builds a tic-tac-toe game from the 
+bottom up. The program will use functions to create a game for two players, X and O, who will take turns marking empty spaces in a 3×3 grid. Whichever player succeeds in placing three of their marks in a horizontal, vertical, or diagonal row wins the game. The project itself contains a README.md, and one lisp file.
