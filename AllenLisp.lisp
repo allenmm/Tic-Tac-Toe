@@ -2,7 +2,10 @@
 ;;
 ;; AllenLisp is a program that contains functions for a tic-tac-toe 
 ;; game. There are functions for a sample board with a winning game and 
-;; an empty board, 
+;; the empty board that the players start out with. Along with functions ;; that check if three elements in a list are equal to each other 
+;; for comparison and a function that determines if the row or column of ;; the board passed in currently has a game-winning move or not. And     ;; functions that display the current value of the board row or column.
+;; In the future there will be functions that allow the user to 
+;; place a move on the board, and play a game against the computer based ;; on user-input.
 ;;
 ;; Marissa Allen
 ;;
