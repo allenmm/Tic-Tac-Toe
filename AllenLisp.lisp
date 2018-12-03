@@ -11,30 +11,53 @@
 ;;
 
 ;; Example board - represented as a list of nine markers on the 
-;; tic-tac-toe board
+;; tic-tac-toe board. A global variable that can be called anywhere.
 (defparameter *sampleboard* (list 'x 'x 'x '- 'o '- '- '- '-))
 
 
 ;; Actual board - the actual empty board that it will start out as.
+;; A global variable that can be called anywhere.
 (defparameter *emptyboard* (list '- '- '- '- '- '- '- '- '-))
 
+;; The default board marker that the first player will start out with.
+;; A global variable that can be called anywhere.
+(defparameter *mark* 'X)
 
 ;; Takes in a board and prints the board that is a list 
-;; of nine symbols in row-major order.
+;; of nine symbols in row-major order. Defines a variable i
+;; that starts out with an inital value of 0, then increments 
+;; the variable by 1 each time it iterates over the function.
+;; When i is nine, then we stop evaluating the statement.
+;;
+;; Then the current ith board value is printed as a space, the ith value
+;;
+;; Grabs each of the elements in turn and prints them off,
+;; before every third element a newline character is printed.
+;; 
 (defun print-board (board)
+  ;;Prints a bar that goes along the top of the tic-tac-toe board.
   (format t "=============")
+  ;;Iterates over the function, increments one each time.
   (do ( (i 0 (+ i 1)))
+  	  ;;Tests if i is nine. If it is nine, done is evaluated.
       ( (= i 9) 'done)
-      ;; all these expressions are evaled in order every iteration
+      ;; All these expressions are evaled in order every iteration
+      ;; and printed
       (if ( = (mod i 3) 0)  (format t "~%|") nil)
+      ;; Standard outprint. ~A gets replaced by the 
+      ;; current ith board value is printed.
       (format t " ~A |" (nth i board))
   )
+  ;; Bottom bar that goes along the bottom of the tic-tac-toe board.
+  ;; is printed when the do statement is exited.
   (format t "~%=============")
 )
 
 
 ;; Takes in three elements and determines if the three elements in a list ;; are all equal to each other. The three in a row checker. If the       ;; elements are all equal to each other it will return true, otherwise it ;; will return false.
 (defun threequal (a b c)
+	;; Evaluates if both a and b are equal to b and c to check
+	;; if the elements are all equal to each other.
 	(and (equal a b) (equal b c)
 	)
  )
@@ -61,6 +84,22 @@
   			)  
   		)
     )
+)
+
+
+
+;; Takes in an index and checks to see if that index is 
+;; equal to an empty spot on the board and print out to show what moves  ;; can be made. If the spot on the board is empty, the move is allowed. 
+;; If the spot on the board already has a position marked, then it will 
+;; say that spot is already marked.
+(defun mark-board (index)
+	(if (equal (nth index *emptyboard*) '-)
+		(setf (nth index *emptyboard*) *mark*)
+		(format t "~%This spot ~A is already marked, try 
+		again.~%~%" index)
+	)
+	;; Print out the current board.
+	(print-board *emptyboard*)
 )
 
 
