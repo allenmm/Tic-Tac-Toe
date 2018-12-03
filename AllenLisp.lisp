@@ -3,9 +3,10 @@
 ;; AllenLisp is a program that contains functions for a tic-tac-toe 
 ;; game. There are functions for a sample board with a winning game and 
 ;; the empty board that the players start out with. Along with functions ;; that check if three elements in a list are equal to each other 
-;; for comparison and a function that determines if the row or column of ;; the board passed in currently has a game-winning move or not. And     ;; functions that display the current value of the board row or column.
-;; In the future there will be functions that allow the user to 
-;; place a move on the board, and play a game against the computer based ;; on user-input.
+;; for comparison and a function that determines if the row or column of ;; the board passed in currently has a game-winning move or not. 
+;; Functions that place a move on the board, switch the mark that's 
+;; currently being used, and functions that let the user play a game 
+;; against themselves. And functions that display the current value of the ;; board row or column. In the future there will be functions that allow ;; the player to play a game against the computer based on user-input.
 ;;
 ;; Marissa Allen
 ;;
@@ -19,9 +20,11 @@
 ;; A global variable that can be called anywhere.
 (defparameter *emptyboard* (list '- '- '- '- '- '- '- '- '-))
 
+
 ;; The default board marker that the first player will start out with.
 ;; A global variable that can be called anywhere.
 (defparameter *mark* 'X)
+
 
 ;; Takes in a board and prints the board that is a list 
 ;; of nine symbols in row-major order. Defines a variable i
@@ -87,13 +90,27 @@
 )
 
 
+;; Takes in an index and checks to see if that index is greater than 
+;; or equal to 0 and less than or equal to 8. If it is, a move is 
+;; placed on the board and the mark is switched to its opposite value. 
+;; If it's not, the player is prompted to enter an index from 0 to 8.
+(defun play (index)
+	(if (and (<= index 8) (>= index 0) )
+		;;
+		(if (mark-board index) nil (other-player))
+		(format t "Enter a move from 0 to 8")		
+	)
+)
 
 ;; Takes in an index and checks to see if that index is 
 ;; equal to an empty spot on the board and print out to show what moves  ;; can be made. If the spot on the board is empty, the move is allowed. 
 ;; If the spot on the board already has a position marked, then it will 
 ;; say that spot is already marked.
 (defun mark-board (index)
+	;; Checks if spot on board is an empty spot.
 	(if (equal (nth index *emptyboard*) '-)
+		;; If the spot on the board is empty it marks it with 
+		;; whichever mark is currently available.
 		(setf (nth index *emptyboard*) *mark*)
 		(format t "~%This spot ~A is already marked, try 
 		again.~%~%" index)
