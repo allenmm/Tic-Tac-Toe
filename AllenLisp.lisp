@@ -103,6 +103,23 @@
 )
 
 
+;; If it is the other player's turn, it checks if the mark is equal
+;; to X. If it's equal to X, then X is changed to the value O. 
+;; If the value of the mark is not X, then it is set to X to be used 
+;; by the other player.
+(defun other-player ()
+	;; Checks what mark is equal to.
+	(if (equal *mark* 'X)
+	;; Sets as O if X.
+	(setf *mark* 'O)
+	;; Sets as X if O.
+	(setf *mark* 'X)
+	)
+	;; Prints out the current mark for the next player.
+	(format t "~%~%Next player is ~A ~%" *mark*)
+)
+
+
 ;; Takes in a board and a row value and returns a list consisting of the ;; nth row (zero-based) of a tic-tac-toe board.
 (defun grab-row (board row)
   (let ((x (* 3 row)))
