@@ -71,7 +71,7 @@
 	;; if the elements are all equal to each other.
 	(and (equal a b) (equal b c)
 	)
- )
+)
 
 
 ;; Takes in a list and determines if a list representing a row or column
@@ -93,11 +93,9 @@
 		;; empty space '-. If they are, then the value is negated 
 		;; since three empty spaces are not a game-winning victory.
   		(not 
-  			(and
-  				(and(equal (first alist) '-)
-  					(equal (second alist) '-)
-  			    )
-  			    	(equal (third alist) '-)
+  			(and(equal (first alist) '-)
+  				(equal (second alist) '-)
+  		    	(equal (third alist) '-)
   			)  
   		)
     )
