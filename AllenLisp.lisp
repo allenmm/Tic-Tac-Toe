@@ -9,7 +9,8 @@
 ;; Functions that place a move on the board, switch the mark that's 
 ;; currently being used, and functions that let the user play a game 
 ;; against themselves. And functions that display the current value of the
-;; board row or column. In the future there will be functions that allow
+;; board row or column. There is also a function that allows a computer
+;; player to place a move in the middle of the board if there is nothing ;; there. In the future there will be functions that allow
 ;; the player to play a game against the computer based on user-input.
 ;;
 ;; Marissa Allen
@@ -107,9 +108,7 @@
 ;; Because the current mark will always be the opposite of the current 
 ;; player, the current mark is changed to its opposite value before
 ;; comparing all the rows, columns, and diagonals. If a player has won, 
-;; the mark of the player that won is printed out. Otherwise, if the 
-;; player hasn't won, the current mark is changed back to the opposite 
-;; player.
+;; a function is called. Otherwise, if the player hasn't won, the current ;; mark is changed back to the opposite player.
 (defun player-win ()
 	;; Changes mark to the opposite mark to reflect the correct
 	;; player winner.
@@ -125,10 +124,30 @@
 			(victory (grab-diagnol-left *emptyboard*))
 			(victory (grab-diagnol-right *emptyboard*))
 		)
-		;; If there is a victory, prints out which mark won.
-		(format t "~%~%Player ~A wins!~%" *mark*)
+		;; If there is a victory calls function to display win.
+		(player-win-quit)
 		;; If the player has not won changes the mark back to normal.
 		(other-player)
+	)
+)
+
+;; If a player has won, the mark of the player that won is printed out.
+;; And says that the game is over. Then the program exits.
+(defun player-win-quit ()
+(format t "~%~%Player ~A wins!~%" *mark*)
+(format t "Game over, hit enter. Exit and reload to play again.")
+(read)
+;; Exits program.
+(quit)
+)
+
+;; If no moves have been placed on the middle of the board, the board 
+;; is marked with the computer-player's mark.
+(defun computer-player-middle ()
+	;; Checks if the middle spot on board is an empty spot.
+	(if (equal (nth 4 *emptyboard*) '-)
+	(setf (nth 4 *emptyboard*) *mark*)	
+	nil
 	)
 )
 
