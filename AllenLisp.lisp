@@ -9,7 +9,8 @@
 ;; Functions that place a move on the board, switch the mark that's 
 ;; currently being used, and functions that let the user play a game 
 ;; against themselves. And functions that display the current value of the
-;; board row or column. In the future there will be functions that allow
+;; board row or column. There is also a function that allows a computer
+;; player to place a move in the middle of the board if there is nothing ;; there. In the future there will be functions that allow
 ;; the player to play a game against the computer based on user-input.
 ;;
 ;; Marissa Allen
@@ -71,7 +72,7 @@
 	;; if the elements are all equal to each other.
 	(and (equal a b) (equal b c)
 	)
- )
+)
 
 
 ;; Takes in a list and determines if a list representing a row or column
@@ -93,14 +94,61 @@
 		;; empty space '-. If they are, then the value is negated 
 		;; since three empty spaces are not a game-winning victory.
   		(not 
-  			(and
-  				(and(equal (first alist) '-)
-  					(equal (second alist) '-)
-  			    )
-  			    	(equal (third alist) '-)
+  			(and(equal (first alist) '-)
+  				(equal (second alist) '-)
+  		    	(equal (third alist) '-)
   			)  
   		)
     )
+)
+
+
+;; Checks to see if the player won by checking to see if any of the rows,
+;; columns, or diagonals on the board have three equal elements in a row.
+;; Because the current mark will always be the opposite of the current 
+;; player, the current mark is changed to its opposite value before
+;; comparing all the rows, columns, and diagonals. If a player has won, 
+;; a function is called. Otherwise, if the player hasn't won, the current ;; mark is changed back to the opposite player.
+(defun player-win ()
+	;; Changes mark to the opposite mark to reflect the correct
+	;; player winner.
+	(other-player)
+	;; Checks to see if there is a victory in a row, column, or diagonal.
+	(if (or
+			(victory (grab-row *emptyboard* 0))
+			(victory (grab-row *emptyboard* 1))
+			(victory (grab-row *emptyboard* 2))
+			(victory (grab-col *emptyboard* 0))
+			(victory (grab-col *emptyboard* 1))
+			(victory (grab-col *emptyboard* 2))
+			(victory (grab-diagnol-left *emptyboard*))
+			(victory (grab-diagnol-right *emptyboard*))
+		)
+		;; If there is a victory calls function to display win.
+		(player-win-quit)
+		;; If the player has not won changes the mark back to normal.
+		(other-player)
+	)
+)
+
+;; If a player has won, the mark of the player that won is printed out.
+;; And says that the game is over. Then the program exits.
+(defun player-win-quit ()
+(format t "~%~%Player ~A wins!~%" *mark*)
+(format t "Game over, hit enter. Exit and reload to play again.")
+(read)
+;; Exits program.
+(quit)
+)
+
+;; If no moves have been placed on the middle of the board, the board 
+;; is marked with the computer-player's mark.
+(defun computer-player-middle ()
+	;; Checks if the middle spot on board is an empty spot.
+	(if (equal (nth 4 *emptyboard*) '-)
+	(setf (nth 4 *emptyboard*) *mark*)	
+	nil
+	)
 )
 
 
@@ -108,14 +156,22 @@
 ;; or equal to 0 and less than or equal to 8. If it is, a move is 
 ;; placed on the board and the mark is switched to its opposite value. 
 ;; If it's not, the player is prompted to enter an index from 0 to 8.
+;; Then the board is checked to see if the player won and the mark for 
+;; the next player is printed out.
 ;; Param: index - a list that represents an index spot on the ttt board.
-(defun play (index)
+(defun play-self (index)
 	(if (and (<= index 8) (>= index 0) )
 		;; If index is from 0 to 8 then mark the board and 
 		;; switch the board mark to its opposite value.
 		(if (mark-board index) nil (other-player))
 		(format t "Enter a move from 0 to 8")		
 	)
+	;;Checks to see if the player won or not.
+	(player-win)
+	
+	;; Prints out the current mark for the next player.
+	(format t "~%~%Next player is ~A ~%" *mark*)
+
 )
 
 ;; Takes in an index and checks to see if that index is 
@@ -146,13 +202,13 @@
 (defun other-player ()
 	;; Checks what mark is equal to.
 	(if (equal *mark* 'x)
-	;; Sets as o if X.
+	;; Sets as o if x.
 	(setf *mark* 'o)
 	;; Sets as x if o.
 	(setf *mark* 'x)
 	)
-	;; Prints out the current mark for the next player.
-	(format t "~%~%Next player is ~A ~%" *mark*)
+	;; Stops nil from being printed, for formatting.
+	(format t "")
 )
 
 
@@ -197,26 +253,26 @@
 )
 
 ;; Takes in a board and returns a list consisting of the nth numbers 
-;; 2, 4, and 8 of a tic-tac-toe board going from left to right.
+;; 0, 4, and 8 of a tic-tac-toe board going from left to right.
 ;; Param: board - a list containing elements of a tic-tac-toe board in 
 ;; row-major order.
 (defun grab-diagnol-left (board)
 	;; Locates the nth elements of the board list.
 	(list 
-		(nth 2 board)
+		(nth 0 board)
 		(nth 4 board)
 		(nth 8 board)
 	)	
 )
 
 ;; Takes in a board and returns a list consisting of the nth numbers 
-;; 0, 4, and 6 of a tic-tac-toe board going from right to left.
+;; 2, 4, and 6 of a tic-tac-toe board going from right to left.
 ;; Param: board - a list containing elements of a tic-tac-toe board in 
 ;; row-major order.
 (defun grab-diagnol-right (board)
 	;; Locates the nth elements of the board list.
 	(list 
-		(nth 0 board)
+		(nth 2 board)
 		(nth 4 board)
 		(nth 6 board)
 	)
